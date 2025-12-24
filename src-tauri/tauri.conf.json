@@ -32,5 +32,13 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "tauri": {
+    "allowlist": {
+      "protocol": {
+        "assetScope": ["asset", "http"],
+        "asset": true
+      }
+    }
   }
 }
