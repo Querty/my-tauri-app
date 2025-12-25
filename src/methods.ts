@@ -19,10 +19,6 @@ export const getUsersAlbums = async () => {
     return albums;
 };
 
-export const getActiveDeviceID = async () => {
-    const state = await sdk.player.getPlaybackState();
-    return state?.device?.id;
-};
 export const setupAlbums = async () => {
     const dropWindowIcon = document.getElementById("dropWindowIcon") as HTMLDivElement;
 
@@ -34,15 +30,14 @@ export const setupAlbums = async () => {
             button.classList.add("album-button");
             
             const img = document.createElement("img");
-            img.src = item.album.images[2].url;
+            img.src = item.album.images[2]?.url ?? item.album.images[0]?.url ?? "";
             img.alt = item.album.name;
             img.title = item.album.name;
             img.classList.add("album-artwork");
             button.appendChild(img);
             button.addEventListener("click", async () => {
-                const id = await getActiveDeviceID();
-                await sdk.player.startResumePlayback(id,item.album.uri);
-                await updatePlayerState();
+                await sdk.player.startResumePlayback(undefined,item.album.uri);
+                await syncPlayerState();
             });
             fragments.appendChild(button);
         });
@@ -111,13 +106,13 @@ export const setVolume = async () =>{
 
 export const setShuffle = async () =>{
     const shuffleBtn = document.getElementById("shuffleBtn") as HTMLButtonElement;
-    const playbackState = await sdk.player.getPlaybackState();
-    let isShuffling = playbackState.shuffle_state;
+    let isShuffling = currentPlaybackState?.shuffle_state ?? false;
+
+    shuffleBtn.textContent = isShuffling ? "➡️" : "🔀";
     if (isShuffling) {
-        shuffleBtn.textContent = "➡️";
         await sdk.player.togglePlaybackShuffle(false);
     } else {
-        shuffleBtn.textContent = "🔀";
         await sdk.player.togglePlaybackShuffle(true);
     }
+    setTimeout(syncPlayerState, 500);
 };
