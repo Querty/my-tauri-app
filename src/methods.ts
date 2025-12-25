@@ -20,13 +20,16 @@ export const getActiveDeviceID = async () => {
     const state = await sdk.player.getPlaybackState();
     return state?.device?.id;
 };
-export const setupAlbums = async (dropWindowIcon: HTMLElement) => {
+export const setupAlbums = async () => {
+    const dropWindowIcon = document.getElementById("dropWindowIcon") as HTMLDivElement;
+
     const albums = await getUsersAlbums();
     if (albums.items.length > 0) {
+        const fragments = document.createDocumentFragment();
         albums.items.forEach((item) => {
             const button = document.createElement("button");
             button.classList.add("album-button");
-            dropWindowIcon.appendChild(button);
+            
             const img = document.createElement("img");
             img.src = item.album.images[2].url;
             img.alt = item.album.name;
@@ -37,47 +40,53 @@ export const setupAlbums = async (dropWindowIcon: HTMLElement) => {
                 const id = await getActiveDeviceID();
                 await sdk.player.startResumePlayback(id,item.album.uri);
                 await updatePlayerState();
-                await updateButtonIcons();
             });
+            fragments.appendChild(button);
         });
+        dropWindowIcon.appendChild(fragments);
     }
 };
+// update player state
+let currentPlaybackState:any = null;
 
-export async function updatePlayerState() {
-    const connected = document.getElementById("connected") as HTMLSpanElement;
+export async function syncPlayerState() {
+
+    const state = await sdk.player.getPlaybackState();
+    if (!state) return;
+
+    currentPlaybackState = state;
+
     const trackIcon = document.getElementById("trackIcon") as HTMLImageElement;
     const trackName = document.getElementById("trackName") as HTMLSpanElement;
     const artistName = document.getElementById("artistName") as HTMLSpanElement;
-    const response = await sdk.player.getAvailableDevices();
-    let devices = response.devices;
+    const playPauseBtn = document.getElementById("playPauseBtn") as HTMLButtonElement;
+    const shuffleBtn = document.getElementById("shuffleBtn") as HTMLButtonElement;
     
-    if (devices.length > 0) {
-        connected.textContent = `🟢`;
-        const curr_playing = await sdk.player.getCurrentlyPlayingTrack();
-        
-        // Check if item exists AND if it has an 'album' property (is it a song?)
-        if (curr_playing && curr_playing.item && "album" in curr_playing.item) {
+    // Check if item exists AND if it has an 'album' property (is it a song?)
+    if (state.item && "album" in state.item) {
              // Access the image safely
-            trackIcon.src = curr_playing.item.album.images[2].url;
-            trackName.textContent = curr_playing.item.name;
-            const artists = curr_playing.item.artists?.map(a => a.name).join(", ") ?? "";
-            artistName.textContent = artists;
-        }
-    } else {
-        connected.textContent = `🔴`;
+        trackIcon.src = state.item.album.images[2]?.url ?? "";
+        trackName.textContent = state.item.name;
+        const artists = state.item.artists?.map(a => a.name).join(", ") ?? "";
+        artistName.textContent = artists;
     }
+
+    // conditional chnahes of icons
+    playPauseBtn.textContent = state.is_playing ? "⏸️" : "▶️";
+    shuffleBtn.textContent = state.shuffle_state ? "🔀" : "➡️";
 }
 
 export const playPause = async () =>{
     const playPauseBtn = document.getElementById("playPauseBtn") as HTMLButtonElement;
-    const playbackState = await sdk.player.getPlaybackState();
-    if (playbackState.is_playing) {
-        playPauseBtn.textContent = "▶️";
+    const isPlaying = currentPlaybackState?.is_playing ?? false;
+    playPauseBtn.textContent = isPlaying ? "▶️" : "⏸️";
+
+    if (isPlaying) {
         await sdk.player.pausePlayback();
     } else {
-        playPauseBtn.textContent = "⏸️";
         await sdk.player.startResumePlayback();
     }
+    setTimeout(syncPlayerState, 500);
 };
 
 export const playNext = async () =>{
@@ -104,29 +113,5 @@ export const setShuffle = async () =>{
     } else {
         shuffleBtn.textContent = "🔀";
         await sdk.player.togglePlaybackShuffle(true);
-    }
-};
-export const updateButtonIcons = async () => {
-    const playbackState = await sdk.player.getPlaybackState();
-    const playPauseBtn = document.getElementById("playPauseBtn") as HTMLButtonElement;
-    const shuffleBtn = document.getElementById("shuffleBtn") as HTMLButtonElement;
-    const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
-    const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
-    const volumeBtn = document.getElementById("volumeBtn") as HTMLButtonElement;
-    
-    prevBtn.textContent = "⏮️";
-    nextBtn.textContent = "⏭️";
-    volumeBtn.textContent = "🔊";
-
-    // conditional chnahes of icons
-    if (playbackState.is_playing) {
-        playPauseBtn.textContent = "⏸️";
-    } else {
-        playPauseBtn.textContent = "▶️";
-    }
-    if (playbackState.shuffle_state) {
-        shuffleBtn.textContent = "🔀";
-    } else {
-        shuffleBtn.textContent = "➡️";
     }
 };

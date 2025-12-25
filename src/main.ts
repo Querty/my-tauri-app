@@ -1,18 +1,8 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import { setupAlbums, updatePlayerState, playPause, playNext, playPrevious, setVolume, setShuffle, updateButtonIcons } from "./methods";
-
-
-
-// write to the body
-const addLine = (text: string) => {
-  const p = document.createElement("p");
-  p.textContent = text;
-  document.body.appendChild(p);
-}
+import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle} from "./methods";
 
 // get elemnts
 const trackBtn = document.getElementById("trackBtn") as HTMLButtonElement;
-const trackIcon = document.getElementById("trackIcon") as HTMLImageElement;
 const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
 const playPauseBtn = document.getElementById("playPauseBtn") as HTMLButtonElement;
 const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
@@ -21,12 +11,13 @@ const volumeBtn = document.getElementById("volumeBtn") as HTMLInputElement;
 const volumeSlider = document.getElementById("volumeSlider") as HTMLInputElement;
 const dropWindowIcon = document.getElementById("dropWindowIcon") as HTMLDivElement
 const dropWindowVolume = document.getElementById("dropWindowVolume") as HTMLDivElement;
-
-// update icons
-await updateButtonIcons();
+// icon setup
+prevBtn.textContent = "⏮️";
+nextBtn.textContent = "⏭️";
+volumeBtn.textContent = "🔊";
 
 // display albums
-await setupAlbums(dropWindowIcon);
+await setupAlbums();
 
 // dropdown menus and closings
 trackBtn.addEventListener("click", async (event) => {
@@ -55,6 +46,6 @@ nextBtn.addEventListener("click", async () => playNext());
 prevBtn.addEventListener("click", async () => playPrevious());
 volumeSlider.addEventListener("input", async () => setVolume());
 
-await updatePlayerState();
+await syncPlayerState();
 
-setInterval(() => {updatePlayerState();}, 5000);
+setInterval(() => {syncPlayerState();}, 2000);
