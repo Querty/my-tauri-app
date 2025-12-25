@@ -11,6 +11,9 @@ const sdk = SpotifyApi.withUserAuthorization(
   ]
 );
 
+export const connect = async () => {
+    
+};
 export const getUsersAlbums = async () => {
     const albums = await sdk.currentUser.albums.savedAlbums()
     return albums;
@@ -51,9 +54,12 @@ let currentPlaybackState:any = null;
 
 export async function syncPlayerState() {
 
+    const connected = document.getElementById("connected") as HTMLSpanElement;
     const state = await sdk.player.getPlaybackState();
-    if (!state) return;
-
+    if (!state) {
+        connected.textContent = "🔴"; return;
+    }
+    connected.textContent = "🟢";
     currentPlaybackState = state;
 
     const trackIcon = document.getElementById("trackIcon") as HTMLImageElement;

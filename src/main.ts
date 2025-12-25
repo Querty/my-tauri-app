@@ -1,5 +1,5 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle} from "./methods";
+import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle, connect} from "./methods";
 
 // get elemnts
 const trackBtn = document.getElementById("trackBtn") as HTMLButtonElement;
@@ -11,6 +11,8 @@ const volumeBtn = document.getElementById("volumeBtn") as HTMLInputElement;
 const volumeSlider = document.getElementById("volumeSlider") as HTMLInputElement;
 const dropWindowIcon = document.getElementById("dropWindowIcon") as HTMLDivElement
 const dropWindowVolume = document.getElementById("dropWindowVolume") as HTMLDivElement;
+//check connection
+await connect();
 // icon setup
 prevBtn.textContent = "⏮️";
 nextBtn.textContent = "⏭️";
