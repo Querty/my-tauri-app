@@ -1,20 +1,195 @@
-.floating-menu {
-  position: absolute;
-  top: 50%; /* Places it ABOVE the button */
-  left: 100%;
-  transform: translateX(-50%); /* Centers it perfectly */
-  
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0px 4px 15px rgba(0,0,0,0.2); /* Adds a modern shadow */
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  z-index: 100; /* Ensures it stays on top of everything else */
+:root {
+  --spotify-green: #1db954;
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --hover-bg: rgba(255, 255, 255, 0.1);
 }
 
+body {
+  margin: 0;
+  padding: 0 10px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Spacing between main sections */
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* --- Connect Indicator --- */
+#connected {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #555; /* Default disconnected gray */
+  text-indent: -9999px; /* Hide text */
+  margin-right: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+#connected.active {
+  background-color: var(--spotify-green);
+  box-shadow: 0 0 8px var(--spotify-green);
+}
+
+/* --- Track Info Section --- */
+.track-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1; /* Take up available space or push controls */
+  min-width: 0; /* Allow text truncation */
+}
+
+#trackBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+#trackIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+}
+
+.track-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#trackName {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#artistName {
+  font-size: 11px;
+  color: #b3b3b3;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Controls Section --- */
+.controls-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #b3b3b3;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  color: white;
+  background-color: var(--hover-bg);
+  transform: scale(1.05);
+}
+
+button svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Play/Pause Button is slightly larger */
+#playPauseBtn svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+/* Active Shuffle State */
+#shuffleBtn.active {
+  color: var(--spotify-green);
+}
+#shuffleBtn.active::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  background-color: var(--spotify-green);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 4px;
+}
+
+/* --- Volume Section --- */
+.volume-wrapper {
+  position: relative;
+}
+
+.floating-menu {
+  position: absolute;
+  bottom: 140%; /* Position above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #282828;
+  border-radius: 8px;
+  padding: 15px 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+/* Vertical Slider Styling */
+#volumeSlider {
+  -webkit-appearance: none;
+  width: 100px; /* Width becomes height when rotated */
+  height: 4px;
+  background: #4d4d4d;
+  border-radius: 2px;
+  outline: none;
+  transform: rotate(-90deg); /* Make it vertical */
+  margin: 50px 0; /* Add margin to account for rotation space */
+  cursor: pointer;
+  accent-color: var(--spotify-green); /* The green color you wanted */
+}
+
+/* Slider Thumb Styling for better look */
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+/* Floating menu visibility */
 .hidden {
   display: none;
+}
+
+#dropWindowIcon {
+    /* Style for the album picker if needed, similar to volume */
+    background: #282828;
+    color: white;
 }

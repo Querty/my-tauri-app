@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<style>@import "./src/styles.css";</style>
-<script type="module" src="/src/main.ts" defer></script>
-<body>
-    <p id="connected">connecting</p>
-<div class="menu-container" style="position: relative; display: inline-block;">
-  <button id="trackBtn">
-    <img id="trackIcon" src="src-tauri/icons/32x32.png" alt="Track Icon">
-  </button>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify Mini Player</title>
+    <style>@import "./src/styles.css";</style>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <div id="connected" title="Connection Status"></div>
 
-  <div id="dropWindowIcon" class="floating-menu hidden">
-  </div>
-</div>
-<div id="trackControl">
-    <p id="trackName">Track Name</p>
-    <p id="artistName">Artist Name</p>
-    <button id="prevBtn">Previous</button>
-    <button id="playPauseBtn">Play/Pause</button>
-    <button id="nextBtn">Next</button>
-    <button id="shuffleBtn">Shuffle</button>
-</div>
-<div class="menu-container" style="position: relative; display: inline-block;">
-    <button id="volumeBtn">Vol</button>
-    <div id="dropWindowVolume" class="floating-menu hidden">
+    <div class="track-section">
+      <div class="menu-container" style="position: relative;">
+        <button id="trackBtn">
+          <img id="trackIcon" src="src-tauri/icons/32x32.png" alt="Track">
+        </button>
+        <div id="dropWindowIcon" class="floating-menu hidden" style="left:0; transform:none; top: 110%; bottom: auto;">
+        </div>
+      </div>
+      
+      <div class="track-text">
+        <p id="trackName">Track Name</p>
+        <p id="artistName">Artist Name</p>
+      </div>
+    </div>
+
+    <div class="controls-container">
+      <button id="prevBtn" title="Previous"></button>
+      <button id="playPauseBtn" title="Play/Pause"></button>
+      <button id="nextBtn" title="Next"></button>
+      <button id="shuffleBtn" title="Shuffle"></button>
+    </div>
+
+    <div class="volume-wrapper menu-container">
+      <button id="volumeBtn" title="Volume"></button>
+      
+      <div id="dropWindowVolume" class="floating-menu hidden">
         <input type="range" id="volumeSlider" min="0" max="100" value="50">
-  </div>
-</div>
-</body>
+      </div>
+    </div>
+  </body>
+</html>
