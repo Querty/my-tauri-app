@@ -1,5 +1,5 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import { setupAlbums, updatePlayerState } from "./methods";
+import { setupAlbums, updatePlayerState, playPause, playNext, playPrevious, setVolume, setShuffle, updateButtonIcons } from "./methods";
 
 
 
@@ -13,16 +13,17 @@ const addLine = (text: string) => {
 // get elemnts
 const trackBtn = document.getElementById("trackBtn") as HTMLButtonElement;
 const trackIcon = document.getElementById("trackIcon") as HTMLImageElement;
-const act1 = document.getElementById("btnAction1") as HTMLSpanElement;
-const act2 = document.getElementById("btnAction2") as HTMLSpanElement;
 const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
 const playPauseBtn = document.getElementById("playPauseBtn") as HTMLButtonElement;
 const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
+const shuffleBtn = document.getElementById("shuffleBtn") as HTMLButtonElement;
 const volumeBtn = document.getElementById("volumeBtn") as HTMLInputElement;
 const volumeSlider = document.getElementById("volumeSlider") as HTMLInputElement;
 const dropWindowIcon = document.getElementById("dropWindowIcon") as HTMLDivElement
 const dropWindowVolume = document.getElementById("dropWindowVolume") as HTMLDivElement;
-const connected = document.getElementById("connected") as HTMLSpanElement;
+
+// update icons
+await updateButtonIcons();
 
 // display albums
 await setupAlbums(dropWindowIcon);
@@ -48,6 +49,12 @@ window.addEventListener("click", (event) => {
   }
 });
 
-await updatePlayerState(connected, trackIcon, playPauseBtn);
+playPauseBtn.addEventListener("click", async () => playPause());
+shuffleBtn.addEventListener("click", async () => setShuffle());
+nextBtn.addEventListener("click", async () => playNext());
+prevBtn.addEventListener("click", async () => playPrevious());
+volumeSlider.addEventListener("input", async () => setVolume());
 
-setInterval(() => {updatePlayerState(connected, trackIcon, playPauseBtn);}, 500);
+await updatePlayerState();
+
+setInterval(() => {updatePlayerState();}, 5000);
