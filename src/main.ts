@@ -48,6 +48,6 @@ window.addEventListener("click", (event) => {
   }
 });
 
-await updatePlayerState(connected);
+await updatePlayerState(connected, trackIcon, playPauseBtn);
 
-setInterval(() => {updatePlayerState(connected, trackIcon);}, 5000);
+setInterval(() => {updatePlayerState(connected, trackIcon, playPauseBtn);}, 500);

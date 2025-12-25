@@ -31,18 +31,33 @@ export const setupAlbums = async (dropWindowIcon: HTMLElement) => {
     }
 };
 
-export async function updatePlayerState(connected: HTMLElement, trackIcon: HTMLImageElement) {
+export async function updatePlayerState(connected: HTMLElement, trackIcon: HTMLImageElement, playPauseBtn: HTMLButtonElement) {
     const response = await sdk.player.getAvailableDevices();
     let devices = response.devices;
-    if(devices.length > 0){
+    
+    if (devices.length > 0) {
         connected.textContent = `🟢`;
         const curr_playing = await sdk.player.getCurrentlyPlayingTrack();
-        if(curr_playing && curr_playing.item){
-            trackIcon.src = curr_playing.item.album.images[2].url;
+        
+        // Check if item exists AND if it has an 'album' property (is it a song?)
+        if (curr_playing && curr_playing.item && "album" in curr_playing.item) {
+             // Access the image safely
+             trackIcon.src = curr_playing.item.album.images[2].url;
         }
 
-    }
-    else {
+        // Pause or play
+        playPauseBtn.addEventListener("click", async () => {
+            const playbackState = await sdk.player.getPlaybackState();
+            let isPlaying = playbackState?.is_playing;
+            if (isPlaying) {
+                await sdk.player.pausePlayback();
+            } else {
+                await sdk.player.startResumePlayback();
+            }
+        });
+
+    } else {
         connected.textContent = `🔴`;
     }
 }
+
