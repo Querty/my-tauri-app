@@ -1,0 +1,20 @@
+.floating-menu {
+  position: absolute;
+  top: 50%; /* Places it ABOVE the button */
+  left: 100%;
+  transform: translateX(-50%); /* Centers it perfectly */
+  
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2); /* Adds a modern shadow */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 100; /* Ensures it stays on top of everything else */
+}
+
+.hidden {
+  display: none;
+}

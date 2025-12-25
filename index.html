@@ -1,2 +1,25 @@
 <!DOCTYPE html>
+<style>@import "./src/styles.css";</style>
 <script type="module" src="/src/main.ts" defer></script>
+<body>
+    <p id="connected"></p>
+<div class="menu-container" style="position: relative; display: inline-block;">
+  <button id="trackBtn">
+    <img id="trackIcon" src="src-tauri/icons/32x32.png" alt="Track Icon">
+  </button>
+
+  <div id="dropWindowIcon" class="floating-menu hidden">
+  </div>
+</div>
+<div id="trackControl">
+    <button id="prevBtn">Previous</button>
+    <button id="playPauseBtn">Play/Pause</button>
+    <button id="nextBtn">Next</button>
+</div>
+<div class="menu-container" style="position: relative; display: inline-block;">
+    <button id="volumeBtn">Vol</button>
+    <div id="dropWindowVolume" class="floating-menu hidden">
+        <input type="range" id="volumeSlider" min="0" max="100" value="50">
+  </div>
+</div>
+</body>

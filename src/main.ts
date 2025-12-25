@@ -1,63 +1,53 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { setupAlbums, updatePlayerState } from "./methods";
 
-// 1. Setup SDK with ALL required permissions
-const sdk = SpotifyApi.withUserAuthorization(
-  '84a2fed80ef444578096092a097a3aae',
-  'http://127.0.0.1:1420/',
-  [
-    "user-top-read",
-    "user-read-playback-state",   // Required to check if playing
-    "user-modify-playback-state"  // Required to pause/play
-  ]
-);
 
-async function setupPlayer() {
-  // 2. Create and Draw the Button IMMEDIATELY
-  const toggleBtn = document.createElement("button");
-  toggleBtn.innerText = "Loading..."; // Placeholder text
-  toggleBtn.style.padding = "10px 20px";
-  toggleBtn.style.fontSize = "16px";
-  document.body.append(toggleBtn);
 
-  // 3. Logic: What happens when you click?
-  toggleBtn.onclick = async () => {
-    try {
-      // Get fresh state right when clicked
-      const state = await sdk.player.getPlaybackState();
-      
-      if (!state || !state.device) {
-        alert("No active Spotify device found! Open Spotify on your phone/PC first.");
-        return;
-      }
-
-      // Toggle logic
-      if (state.is_playing) {
-        toggleBtn.innerText = "Play";
-        await sdk.player.pausePlayback(state.device.id);
-        
-      } else {
-        toggleBtn.innerText = "Pause";
-        await sdk.player.startResumePlayback(state.device.id);
-        
-      }
-    } catch (e) {
-      console.error("Playback error:", e);
-    }
-  };
-
-  // 4. Initial Check: Update button text on load
-  try {
-    const state = await sdk.player.getPlaybackState();
-    if (state && state.is_playing) {
-      toggleBtn.innerText = "Pause";
-    } else {
-      toggleBtn.innerText = "Play";
-    }
-  } catch (e) {
-    toggleBtn.innerText = "Play (Error)";
-    console.error("Could not fetch state:", e);
-  }
+// write to the body
+const addLine = (text: string) => {
+  const p = document.createElement("p");
+  p.textContent = text;
+  document.body.appendChild(p);
 }
 
-// Run it
-setupPlayer();
+// get elemnts
+const trackBtn = document.getElementById("trackBtn") as HTMLButtonElement;
+const trackIcon = document.getElementById("trackIcon") as HTMLImageElement;
+const act1 = document.getElementById("btnAction1") as HTMLSpanElement;
+const act2 = document.getElementById("btnAction2") as HTMLSpanElement;
+const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
+const playPauseBtn = document.getElementById("playPauseBtn") as HTMLButtonElement;
+const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
+const volumeBtn = document.getElementById("volumeBtn") as HTMLInputElement;
+const volumeSlider = document.getElementById("volumeSlider") as HTMLInputElement;
+const dropWindowIcon = document.getElementById("dropWindowIcon") as HTMLDivElement
+const dropWindowVolume = document.getElementById("dropWindowVolume") as HTMLDivElement;
+const connected = document.getElementById("connected") as HTMLSpanElement;
+
+// display albums
+await setupAlbums(dropWindowIcon);
+
+// dropdown menus and closings
+trackBtn.addEventListener("click", async (event) => {
+  event.stopPropagation();
+  dropWindowIcon.classList.toggle("hidden");
+  dropWindowVolume.classList.add("hidden");
+});
+
+volumeBtn.addEventListener("click", async (event) => {
+  event.stopPropagation();
+  dropWindowVolume.classList.toggle("hidden");
+  dropWindowIcon.classList.add("hidden");
+});
+
+window.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  if (!target.closest(".menu-container")) {
+    dropWindowIcon.classList.add("hidden");
+    dropWindowVolume.classList.add("hidden");
+  }
+});
+
+await updatePlayerState(connected);
+
+setInterval(() => {updatePlayerState(connected, trackIcon);}, 5000);
