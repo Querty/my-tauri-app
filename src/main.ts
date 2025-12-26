@@ -1,5 +1,6 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle} from "./methods";
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 // --- SVG Icons Constants ---
 export const ICONS = {
@@ -57,6 +58,13 @@ shuffleBtn.addEventListener("click", async () => setShuffle());
 nextBtn.addEventListener("click", async () => playNext());
 prevBtn.addEventListener("click", async () => playPrevious());
 volumeSlider.addEventListener("input", async () => setVolume());
+// closing logic
+const closeBtn = document.getElementById("closeBtn");
+
+closeBtn?.addEventListener("click", async () => {
+  const appWindow = getCurrentWindow();
+  await appWindow.close();
+});
 
 const startPolling = async () => {
   try {

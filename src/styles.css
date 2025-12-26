@@ -18,8 +18,19 @@ body {
   overflow: hidden;
   box-sizing: border-box;
 }
-
+/* Container to center the items */
+#status-container {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px; /* Moved margin here from #connected */
+  flex-shrink: 0;
+}
 /* --- Connect Indicator --- */
+/* Update #connected to position it absolutely within the container */
 #connected {
   width: 8px;
   height: 8px;
@@ -30,9 +41,51 @@ body {
   box-shadow: 0 0 5px rgba(0,0,0,0.5);
   flex-shrink: 0;
 }
+/* New Close Button Styles */
+#closeBtn {
+  position: absolute;
+  top: -35px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  background-color: #ff5f57; /* Nice "Close" Red */
+  color: #3e0e10;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  /* Start hidden and slightly above */
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  z-index: 10;
+}
+#closeBtn:hover {
+  background-color: #ff453a;
+  color: white;
+}
 #connected.active {
   background-color: var(--spotify-green);
   box-shadow: 0 0 8px var(--spotify-green);
+}
+
+/* --- THE ANIMATION --- */
+/* When hovering the whole window (body), move the dot down and hide it 
+body:hover #connected {
+  transform: translateY(15px);
+  opacity: 0;
+}
+*/
+
+/* When hovering the whole window, slide the close button in */
+body:hover #closeBtn {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* --- Track Info Section --- */
