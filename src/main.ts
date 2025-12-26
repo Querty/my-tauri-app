@@ -1,4 +1,3 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle} from "./methods";
 import { getCurrentWindow } from '@tauri-apps/api/window';
 

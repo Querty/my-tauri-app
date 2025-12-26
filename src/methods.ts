@@ -102,11 +102,12 @@ export const playPrevious = async () =>{
 
 export const setVolume = async () =>{
     const volumeSlider = document.getElementById("volumeSlider") as HTMLInputElement;
+   
     await sdk.player.setPlaybackVolume(volumeSlider.valueAsNumber);
 };
 
 export const getUsersAlbums = async () => {
-    const albums = await sdk.currentUser.albums.savedAlbums()
+    const albums = await sdk.currentUser.albums.savedAlbums(9)
     return albums;
 };
 
@@ -131,6 +132,7 @@ export const setupAlbums = async () => {
             button.appendChild(img);
             button.addEventListener("click", async () => {
                 await sdk.player.startResumePlayback(undefined,item.album.uri);
+                dropWindowIcon.classList.add("hidden");
                 await syncPlayerState();
             });
             fragments.appendChild(button);
@@ -138,3 +140,4 @@ export const setupAlbums = async () => {
         dropWindowIcon.appendChild(fragments);
     }
 };
+

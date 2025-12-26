@@ -215,13 +215,12 @@ button svg {
 /* Vertical Slider Styling */
 #volumeSlider {
   -webkit-appearance: none;
-  width: 20px; 
+  width: 100px; 
   height: 4px;
   background: #4d4d4d;
   border-radius: 2px;
   outline: none;
-  transform: rotate(-90deg); 
-  margin: 50px 0; 
+  margin: 0 0; 
   cursor: pointer;
   accent-color: var(--spotify-green); 
 }
@@ -236,13 +235,86 @@ button svg {
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 
-/* Floating menu visibility */
+/* --- Fix the "Always Visible" Bug --- */
 .hidden {
-  display: none;
+  display: none !important; /* Force hide, overriding flex/ID styles */
 }
 
+/* --- Album List: Horizontal & Side-by-Side --- */
 #dropWindowIcon {
-    /* Style for the album picker if needed, similar to volume */
-    background: #282828;
-    color: white;
+  /* 1. Layout: Horizontal Row */
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  
+  /* 2. Positioning: To the RIGHT of the icon */
+  position: absolute;
+  left: 50%;            /* Starts right after the album art */
+  top: 50%;              /* Centers vertically relative to the button */
+  
+  /* 3. Centering & Spacing */
+  transform: translateY(-100%) !important; /*Perfect vertical center */
+  margin-left: 0px;           /* Small gap between art and menu */
+  z-index: 999;                /* Ensure it sits ON TOP of the play buttons */
+  
+  /* 4. Sizing */
+  width: max-content;
+  max-width: 400px;         /* Allow it to stretch wider */
+  height: 60px;
+  
+  /* 5. Scroll behavior */
+  overflow-x: auto;         /* Scroll sideways */
+  overflow-y: hidden;
+  padding: 0 15px;
+  align-items: center;
+  
+  /* 6. Visuals (Removed the round pill shape) */
+  background: rgba(40, 40, 40, 0.95);
+  border-radius: 8px;       /* Standard corners, not round */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+
+/* 1. Ensure the parent is the anchor */
+.volume-wrapper {
+    position: relative; 
+}
+
+/* 2. Style the dropdown to appear on the LEFT */
+#dropWindowVolume {
+    position: absolute;
+    
+    /* Horizontal Position: Pushes it to the LEFT of the container */
+    right: 100%; 
+    left: auto;   /* Overwrite any default 'left' values */
+    
+    /* Vertical Center: Same as your album menu */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    /* Optional: Add space between button and slider */
+    margin-right: 15px; 
+    
+    /* Ensure it handles the width correctly */
+    width: max-content;
+    display: flex;       /* Helps align the input inside */
+    align-items: center;
+}
+
+/* Hide scrollbar for cleanliness */
+#dropWindowIcon::-webkit-scrollbar {
+  display: none; 
+}
+
+#dropWindowIcon::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+#dropWindowIcon::-webkit-scrollbar-thumb {
+  background: #555; 
+  border-radius: 3px;
+}
+
+#dropWindowIcon::-webkit-scrollbar-thumb:hover {
+  background: #888; 
 }
