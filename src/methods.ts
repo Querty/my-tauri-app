@@ -33,53 +33,7 @@ const getActiveDeviceId = async (): Promise<string> => {
     // We return empty string to satisfy TypeScript, though the API call might still fail/ignore it.
     return ""; 
 };
-// Add this at the top of methods.ts
-export const activateLocalPlayer = () => {
-    // 1. Inject the Spotify Player Script dynamically
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
 
-    // 2. Define the global callback that Spotify calls when the script loads
-    window.onSpotifyWebPlaybackSDKReady = () => {
-        const player = new Spotify.Player({
-            name: 'My Tauri App', // <--- This is your "DNS" / Device Name!
-            getOAuthToken: async (cb) => {
-                // Bridge your existing SDK auth to the Player SDK
-                const token = await sdk.getAccessToken();
-                if (token) {
-                    cb(token.access_token);
-                }
-            },
-            volume: 0.5
-        });
-
-        // 3. Log errors
-        player.addListener('initialization_error', ({ message }) => { console.error(message); });
-        player.addListener('authentication_error', ({ message }) => { console.error(message); });
-        player.addListener('account_error', ({ message }) => { console.error(message); });
-        player.addListener('playback_error', ({ message }) => { console.error(message); });
-
-        // 4. Handle "Ready" - This is when your device comes online
-        player.addListener('ready', async ({ device_id }) => {
-            console.log('Ready with Device ID', device_id);
-            
-            // OPTIONAL: Automatically transfer playback to this app immediately
-            // await sdk.player.transferPlayback([device_id]); 
-            
-            // Force a UI refresh so the new device icon appears
-            // registerInteraction(); // (From your previous fix)
-            // await syncPlayerState(); 
-        });
-
-        player.addListener('not_ready', ({ device_id }) => {
-            console.log('Device ID has gone offline', device_id);
-        });
-
-        player.connect();
-    };
-};
 const registerInteraction = () => {
     lastInteractionTime = Date.now();
 };
