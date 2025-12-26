@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "my-tauri-app",
+  "productName": "Spotify Remote Player",
   "version": "0.1.0",
   "identifier": "com.mytauriapp.app",
   "build": {
@@ -15,7 +15,7 @@
       {
         "fullscreen": false,
         "resizable": false,
-        "title": "my-tauri-app",
+        "title": "Spotify Remote Player",
         "width": 600,
         "height": 100,
         "decorations": false,

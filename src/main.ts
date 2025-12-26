@@ -1,4 +1,4 @@
-import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle} from "./methods";
+import { setupAlbums, syncPlayerState, playPause, playNext, playPrevious, setVolume, setShuffle, activateLocalPlayer} from "./methods";
 import { getCurrentWindow } from '@tauri-apps/api/window';
 
 // --- SVG Icons Constants ---
@@ -27,6 +27,9 @@ prevBtn.innerHTML = ICONS.prev;
 nextBtn.innerHTML = ICONS.next;
 volumeBtn.innerHTML = ICONS.volume;
 shuffleBtn.innerHTML = ICONS.shuffle;
+
+// Initialize the local audio player
+activateLocalPlayer();
 
 // display albums
 await setupAlbums();
