@@ -13,9 +13,12 @@
     "withGlobalTauri": true,
     "windows": [
       {
+        "fullscreen": false,
+        "resizable": false,
         "title": "my-tauri-app",
-        "width": 800,
-        "height": 800,
+        "width": 600,
+        "height": 100,
+        "decorations": false,
         "alwaysOnTop": true
       }
     ],
